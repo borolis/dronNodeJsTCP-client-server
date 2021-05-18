@@ -15,7 +15,7 @@ server.on('connection', (conn)=> {
     conn.on('data', (data) => {
         const {value, type} = JSON.parse(data.toString())
         console.log(`Data from client [${conn.id}]: ${data}`)
-        conn.write(`[type ${type === typeof value?type:'TYPE_ERROR'}]` + value)
+        conn.write(`[type ${type === typeof value?type:'TYPE_ERROR'}] ` + value)
     })
 })
 

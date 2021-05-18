@@ -41,6 +41,7 @@ const askUser = () => {
             msg.type = answer
         } else {
             msg.type = 'string'
+            console.log('Entered type is Incorrect, using default type [string]')
         }
 
         rl.question('Enter value:', (answer) => {
