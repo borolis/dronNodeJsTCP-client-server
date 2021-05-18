@@ -1,19 +1,24 @@
-const SERVER_IP = '127.0.0.1'
+const SERVER_IP = '192.168.1.47'
 const SERVER_PORT = 1337
-
+const uuidModule = require('uuid')
 const net = require('net');
 
-const server = net.createServer((socket) => {
-    socket.on('error', (err) => {
+const server = net.createServer()
+
+server.on('connection', (conn)=> {
+    conn.id = uuidModule.v4()
+    console.log(`Client connected with address:[${conn.remoteAddress}], clientUUID:[${conn.id}] `)
+    conn.on('error', (err) => {
         console.log(err)
     })
 
-    socket.on('data', (data) => {
-        const {value, type} = JSON.parse(data)
-        console.log(socket)
-        socket.write(`[type ${type === typeof value?type:'TYPE_ERROR'}]` + value)
+    conn.on('data', (data) => {
+        const {value, type} = JSON.parse(data.toString())
+        console.log(`Data from client [${conn.id}]: ${data}`)
+        conn.write(`[type ${type === typeof value?type:'TYPE_ERROR'}]` + value)
     })
-});
+})
+
 
 server.on('listening', () => {
     console.log(`Server is successfully started at ${SERVER_IP}:${SERVER_PORT}!`)
